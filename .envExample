@@ -1,0 +1,8 @@
+# Servidor
+PORT=
+
+# Usuario MongoDB
+DB_CONNECTION=
+
+# JWT
+JWT_SECRET=
