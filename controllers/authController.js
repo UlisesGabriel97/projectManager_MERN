@@ -3,6 +3,7 @@ const errorResponse = require('../helpers/errorResponse');
 const User = require('../database/models/User');
 const generateTokenRandom = require('../helpers/generateTokenRandom');
 const generateJWT = require('../helpers/generateJWT');
+const { confirmRegister, forgetPassword } = require('../helpers/sendMails');
 
 module.exports = {
     register: async (req,res) => {
@@ -20,15 +21,22 @@ module.exports = {
                 throw createError(400,"El email ya se encuentra registrado")
             }
             
+            const token = generateTokenRandom()
             user = new User(req.body)
-            user.token = generateTokenRandom()
+            user.token = token
             //console.log("User:",user);
             const userStore = await user.save()
 
+            await confirmRegister({
+                name: userStore.name,
+                email: userStore.email,
+                token: userStore.token,
+            })
+
             return res.status(201).json({
                 ok: true,
-                msg: 'Usuario registrado',
-                data: userStore,
+                msg: 'Se ha enviado un correo para confirmar su cuenta',
+                user: userStore,
             })            
         } catch (error) {
             console.log(error)
@@ -37,8 +45,8 @@ module.exports = {
 
     },
     login: async (req,res) => {
+        const {email, password} = req.body
         try {
-            const {email, password} = req.body
             if ([email, password].includes('')) {
                 throw createError(400,'Todos los campos son obligatorios')
             };
@@ -114,12 +122,17 @@ module.exports = {
                 email
             });
 
-            if (!user) throw createError(400,"Email incorrecto");
+            if (!user) throw createError(400,"Email registrado anteriormente");
 
-            user.token = generateTokenRandom;
+            const token = generateTokenRandom()
+            user.token = token;
             await user.save()
 
-            // TODO: enviar email
+            await forgetPassword({
+                name: user.name,
+                email: user.email,
+                token: user.token,
+            })
 
             return res.status(200).json({
                 ok: true,
@@ -133,21 +146,39 @@ module.exports = {
     },
     verifyToken: async (req,res) => {
         try {
+
+            const {token} = req.query
+
+            if (!token) throw createError(400, 'Debe ingresar el token')
+
+            const user = await User.findOne({token})
+
+            if (!user) throw createError(400, 'Token inválido')
+
             return res.status(200).json({
                 ok: true,
                 msg: 'Token verificado'
             })            
         } catch (error) {
             console.log(error)
-            return res.status(error.status || 500).json({
-                ok: false,
-                msg: error.message || 'Hubo un error en VERIFY-TOKEN'
-            })
+            return errorResponse(res,error,"VERIFY-TOKEN")
         }
 
     },
     changePassword: async (req,res) => {
         try {
+
+            const {token} = req.query;
+            const {password} = req.body;
+
+            if (!password) throw createError(400, 'La contraseña es obligatoria')
+
+            const user = await User.findOne({token})
+
+            user.password = password;
+            user.token = '';
+            await user.save()
+
             return res.status(200).json({
                 ok: true,
                 msg: 'Password actualizado'

@@ -7,10 +7,23 @@ const connectDB = require('./database/config')
 var app = express();
 connectDB()
 
+const cors = require('cors')
+const whiteList = [process.env.URL_FRONT]
+const corsOptions = {
+  origin: function (origin,cb) {
+    if (whiteList.includes(origin)) {
+      cb(null,true)
+    } else {
+      cb(new Error('Error de Cors'))
+    }
+  }
+}
+
 app
   .use(logger('dev'))
   .use(express.json())
   .use(express.urlencoded({ extended: false }))
+  .use(cors(corsOptions))
 
 //Rutas
 app
