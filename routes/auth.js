@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const { changePassword, checked, login, register, sendToken, verifyToken } = require('../controllers/authController')
+const { changePassword, checkedUser, login, register, sendToken, verifyToken } = require('../controllers/authController')
 
 /* /api/auth/... */
 
 router
     .post('/register', register)
     .post('/login', login)
-    .get('/checked', checked)
+    .get('/checkedUser', checkedUser)
     .post('/send-token', sendToken)
     .route('/reset-password')
         .get(verifyToken)

@@ -61,12 +61,7 @@ export const Register = () => {
 
         } catch (error) {
             console.error(error);
-            handleShowAlert(error.response.data.msg)
-            Swal.fire({
-                icon: 'error',
-                title: 'Upss! Hubo problemas en su registración',
-                text: error.response.data.msg,
-            })
+            handleShowAlert(error.response?.data.msg)
         }
 
     };
@@ -86,7 +81,7 @@ export const Register = () => {
                 alert.msg && <Alert {...alert} />
             }
             <Form onSubmit={handleSubmit} noValidate>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3">
                     <Form.Label htmlFor="name">Nombre</Form.Label>
                     <Form.Control
                         id="name"
@@ -99,7 +94,7 @@ export const Register = () => {
                     />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3">
                     <Form.Label>Correo electrónico</Form.Label>
                     <Form.Control
                         type="email"
@@ -110,7 +105,7 @@ export const Register = () => {
                         onChange={handleInputChange} />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Group className="mb-3">
                     <Form.Label htmlFor="password">Contraseña</Form.Label>
                     <Form.Control
                         type="password"
@@ -121,7 +116,7 @@ export const Register = () => {
                         onChange={handleInputChange} />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Group className="mb-3">
                     <Form.Label htmlFor="password2">Confirma tu contraseña</Form.Label>
                     <Form.Control
                         type="password"
@@ -131,13 +126,13 @@ export const Register = () => {
                         name="password2"
                         onChange={handleInputChange} />
                 </Form.Group>
-                
+
                 <Button variant="secondary" type="submit" disabled={sending} className='d-block mx-auto' >
-                    Iniciar sessión
+                    Crear cuenta
                 </Button>
             </Form>
             <nav className='text-center mt-3'>
-                <Link to={'/'} >
+                <Link to={'/'} className='text-decoration-none' >
                     ¿Estás registrado? Iniciá sesión
                 </Link>
             </nav>

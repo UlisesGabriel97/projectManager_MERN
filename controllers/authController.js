@@ -6,21 +6,21 @@ const generateJWT = require('../helpers/generateJWT');
 const { confirmRegister, forgetPassword } = require('../helpers/sendMails');
 
 module.exports = {
-    register: async (req,res) => {
+    register: async (req, res) => {
         try {
 
-            const {name, email, password} = req.body;
+            const { name, email, password } = req.body;
             if ([name, email, password].includes('')) {
-                throw createError(400,'Todos los campos son obligatorios')
+                throw createError(400, 'Todos los campos son obligatorios')
             }
 
             let user = await User.findOne({
                 email
             });
             if (user) {
-                throw createError(400,"El email ya se encuentra registrado")
+                throw createError(400, "El email ya se encuentra registrado")
             }
-            
+
             const token = generateTokenRandom()
             user = new User(req.body)
             user.token = token
@@ -37,33 +37,33 @@ module.exports = {
                 ok: true,
                 msg: 'Se ha enviado un correo para confirmar su cuenta',
                 user: userStore,
-            })            
+            })
         } catch (error) {
             console.log(error)
-            return errorResponse(res,error,"Register")
+            return errorResponse(res, error, "Register")
         }
 
     },
-    login: async (req,res) => {
-        const {email, password} = req.body
+    login: async (req, res) => {
+        const { email, password } = req.body
         try {
             if ([email, password].includes('')) {
-                throw createError(400,'Todos los campos son obligatorios')
+                throw createError(400, 'Todos los campos son obligatorios')
             };
 
             let user = await User.findOne({
                 email
             });
             if (!user) {
-                throw createError(403,"Credenciales inválidas | EMAIL")
+                throw createError(403, "Credenciales inválidas")
             };
             if (!user.checked) {
-                throw createError(403,"Tu cuenta no ha sido confirmada | EMAIL")
+                throw createError(403, "Tu cuenta no ha sido confirmada")
             };
             if (!await user.checkedPassword(password)) {
-                throw createError(403,"Credenciales inválidas | PASSWORD")
+                throw createError(403, "Credenciales inválidas")
             }
-            
+
 
 
 
@@ -72,32 +72,32 @@ module.exports = {
                 msg: 'Usuario logueado',
                 user: {
                     nombre: user.name,
-                    email: user.email,
-                    token: generateJWT({
-                        id: user._id
-                    })
+                    _id: user._id,
                 },
-            })            
+                token: generateJWT({
+                    id: user._id
+                })
+            })
         } catch (error) {
             console.log(error)
-            return errorResponse(res,error,"Login")
+            return errorResponse(res, error, "Login")
         }
 
     },
-    checked: async (req,res) => {
-        const {token} = req.body;   // http://localhost:4000/api/auth/checked?token=jkb43lhjkbkhj423ljh
+    checkedUser: async (req, res) => {
+        const { token } = req.query;   // http://localhost:4000/api/auth/checkedUser?token=jkb43lhjkbkhj423ljh
 
         try {
             if (!token) {
-                throw createError(400,"Token inexistente | TOKEN")
+                throw createError(400, "Token inexistente")
             };
 
             const user = await User.findOne({
                 token
             });
-
+            
             if (!user) {
-                throw createError(400,"Token inválido | TOKEN")
+                throw createError(400, "Token inválido")
             };
 
             user.checked = true;
@@ -108,21 +108,21 @@ module.exports = {
             return res.status(201).json({
                 ok: true,
                 msg: 'Registro completado exitosamente'
-            })            
+            })
         } catch (error) {
             console.log(error)
-            return errorResponse(res,error,"CHECKED")
+            return errorResponse(res, error, "CHECKED")
         }
 
     },
-    sendToken: async (req,res) => {
-        const {email} = req.body;
+    sendToken: async (req, res) => {
+        const { email } = req.body;
         try {
             let user = await User.findOne({
                 email
             });
 
-            if (!user) throw createError(400,"Email registrado anteriormente");
+            if (!user) throw createError(400, "Email registrado anteriormente");
 
             const token = generateTokenRandom()
             user.token = token;
@@ -137,43 +137,45 @@ module.exports = {
             return res.status(200).json({
                 ok: true,
                 msg: 'Token enviado'
-            })            
+            })
         } catch (error) {
             console.log(error)
-            return errorResponse(res,error,"SEND-TOKEN")
+            return errorResponse(res, error, "SEND-TOKEN")
         }
-        
+
     },
-    verifyToken: async (req,res) => {
+    verifyToken: async (req, res) => {
         try {
 
-            const {token} = req.query
+            const { token } = req.query
 
             if (!token) throw createError(400, 'Debe ingresar el token')
 
-            const user = await User.findOne({token})
+            const user = await User.findOne({ token })
 
             if (!user) throw createError(400, 'Token inválido')
 
             return res.status(200).json({
                 ok: true,
                 msg: 'Token verificado'
-            })            
+            })
         } catch (error) {
             console.log(error)
-            return errorResponse(res,error,"VERIFY-TOKEN")
+            return errorResponse(res, error, "VERIFY-TOKEN")
         }
 
     },
-    changePassword: async (req,res) => {
+    changePassword: async (req, res) => {
         try {
 
-            const {token} = req.query;
-            const {password} = req.body;
+            const { token } = req.query;
+            const { password } = req.body;
 
             if (!password) throw createError(400, 'La contraseña es obligatoria')
 
-            const user = await User.findOne({token})
+            const user = await User.findOne({ token })
+
+            if (!user) throw createError(400, 'El token es inválido')
 
             user.password = password;
             user.token = '';
@@ -182,7 +184,7 @@ module.exports = {
             return res.status(200).json({
                 ok: true,
                 msg: 'Password actualizado'
-            })            
+            })
         } catch (error) {
             console.log(error)
             return res.status(error.status || 500).json({
