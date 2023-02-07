@@ -101,7 +101,7 @@ const ProjectsProvider = ({ children }) => {
                 }
             }
 
-            const { data } = await clientAxios.post('/projects/', project, config)
+            const { data } = await clientAxios.post('/projects', project, config)
             setProjects([...projects, data.project])
 
             Toast.fire({

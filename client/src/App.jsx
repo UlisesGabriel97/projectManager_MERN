@@ -12,7 +12,6 @@ import { Projects } from './pages/Projects'
 import { ProjectAdd } from './pages/ProjectAdd'
 import { ProjectEdit } from './pages/ProjectEdit'
 import { Project } from './pages/Project'
-import { TaskAdd } from './pages/TaskAdd'
 import { ProjectsProvider } from './context/ProjectsProvider'
 
 
