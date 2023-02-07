@@ -12,6 +12,8 @@ import { Projects } from './pages/Projects'
 import { ProjectAdd } from './pages/ProjectAdd'
 import { ProjectEdit } from './pages/ProjectEdit'
 import { Project } from './pages/Project'
+import { TaskAdd } from './pages/TaskAdd'
+import { ProjectsProvider } from './context/ProjectsProvider'
 
 
 function App() {
@@ -19,60 +21,62 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          {/* Rutas Púbicas */}
-          <Route
-            path='/'
-            element={<AuthLayout />}
-          >
+        <ProjectsProvider>
+          <Routes>
+            {/* Rutas Púbicas */}
             <Route
-              index
-              element={<Login />}
-            />
+              path='/'
+              element={<AuthLayout />}
+            >
+              <Route
+                index
+                element={<Login />}
+              />
+              <Route
+                path='register'
+                element={<Register />}
+              />
+              <Route
+                path='forget-password'
+                element={<ForgetPassword />}
+              />
+              <Route
+                path='recover-password/:token'
+                element={<RecoverPassword />}
+              />
+              <Route
+                path='confirm/:token'
+                element={<ConfirmAccount />}
+              />
+              <Route
+                path='*'
+                element={<h1>¡404! Página no encontrada</h1>}
+              />
+            </Route>
+            {/* Rutas Privadas */}
             <Route
-              path='register'
-              element={<Register />}
-            />
-            <Route
-              path='forget-password'
-              element={<ForgetPassword />}
-            />
-            <Route
-              path='recover-password/:token'
-              element={<RecoverPassword />}
-            />
-            <Route
-              path='confirm/:token'
-              element={<ConfirmAccount />}
-            />
-            <Route
-              path='*'
-              element={<h1>¡404! Página no encontrada</h1>}
-            />
-          </Route>
-          {/* Rutas Privadas */}
-          <Route
-            path='/projects'
-            element={<ProtectedLayout />}
-          >
-            <Route
-              index
-              element={<Projects />}
-            />
-            <Route 
-              path='create-project'
-              element={<ProjectAdd />}
-            />
-            <Route 
-              path='edit-project/:id'
-              element={<ProjectEdit />}
-            />
-            <Route 
-              path='direccionDelProyecto'
-              element={<Project />}
-            />
-          </Route>
-        </Routes>
+              path='/projects'
+              element={<ProtectedLayout />}
+            >
+              <Route
+                index
+                element={<Projects />}
+              />
+              <Route 
+                path='create-project'
+                element={<ProjectAdd />}
+              />
+              <Route 
+                path='edit-project/:id'
+                element={<ProjectEdit />}
+              />
+              <Route 
+                path='direccionDelProyecto'
+                element={<Project />}
+              />
+            </Route>
+          </Routes>
+        </ProjectsProvider>
       </AuthProvider>
     </BrowserRouter>
   )
