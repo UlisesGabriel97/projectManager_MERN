@@ -1,15 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import Spinner from 'react-bootstrap/Spinner';
 import { Navigate, Outlet } from "react-router-dom";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
-import AuthContext from "../context/authProvider";
 import useAuth from "../hooks/useAuth";
 
 export const ProtectedLayout = () => {
-    /* const { auth, loading } = useAuth(); */
-    const { auth } = useContext(AuthContext)
-    const { loading } = AuthContext
+    
+    const { auth, loading } = useAuth()
     /* setLoading(true) */
     if (loading) {
         return (

@@ -5,14 +5,14 @@ import { Register } from './pages/Register'
 import { ForgetPassword } from './pages/ForgetPassword'
 import { RecoverPassword } from './pages/RecoverPassword'
 import { ConfirmAccount } from './pages/ConfirmAccount'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { AuthProvider } from './context/authProvider'
+import { AuthProvider } from './context/AuthProvider'
 import { ProtectedLayout } from './layouts/ProtectedLayout'
 import { Projects } from './pages/Projects'
 import { ProjectAdd } from './pages/ProjectAdd'
 import { ProjectEdit } from './pages/ProjectEdit'
 import { Project } from './pages/Project'
 import { ProjectsProvider } from './context/ProjectsProvider'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function App() {

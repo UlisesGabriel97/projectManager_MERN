@@ -1,10 +1,8 @@
-import React from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from "react"
 import { Button, Container, Form } from 'react-bootstrap'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import { clientAxios } from '../../config/clientAxios'
+import { clientAxios } from '../config/clientAxios'
 import { Alert } from '../components/Alert'
 
 
@@ -59,7 +57,8 @@ export const RecoverPassword = () => {
                 icon: 'success',
                 title: 'Contraseña actualizada',
                 text: data.msg,
-                confirmButtonText: 'Iniciar sesión'
+                confirmButtonText: 'Iniciar sesión',
+                allowOutsideClick : false
             }).then(result => {
                 if (result.isConfirmed) {
                     navigate('/')

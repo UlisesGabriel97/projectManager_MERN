@@ -1,16 +1,17 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button, Container, Form } from 'react-bootstrap'
 import { Alert } from '../components/Alert'
-import { clientAxios } from '../../config/clientAxios'
+import { clientAxios } from '../config/clientAxios'
 import { useForm } from '../hooks/useForm'
-import AuthContext from '../context/authProvider'
+import useAuth from '../hooks/useAuth'
 
+const exRegEmail = /^[^@]+@[^@]+\.[a-zA-Z]{2,}/;
 
 export const Login = () => {
 
     const [alert, setAlert] = useState({})
-    const { setAuth } = useContext(AuthContext)
+    const { setAuth } = useAuth()
     const navigate = useNavigate()
 
 
@@ -34,7 +35,6 @@ export const Login = () => {
 
     const { email, password } = formValues
 
-    const exRegEmail = /^[^@]+@[^@]+\.[a-zA-Z]{2,}/;
     const handleSubmit = async (e) => {
         e.preventDefault()
 
@@ -54,7 +54,6 @@ export const Login = () => {
                 password
             })
 
-            console.log(data)
             setAuth(data.user)
             sessionStorage.setItem('token', data.token)
             navigate('/projects')

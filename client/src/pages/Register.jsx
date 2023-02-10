@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import { clientAxios } from '../../config/clientAxios'
+import { clientAxios } from '../config/clientAxios'
 import { Alert } from '../components/Alert'
 import { useForm } from '../hooks/useForm'
 import { Button, Container, Form } from 'react-bootstrap'
 
+const exRegEmail = /^[^@]+@[^@]+\.[a-zA-Z]{2,}/;
 export const Register = () => {
 
     const [alert, setAlert] = useState({})
@@ -18,13 +19,11 @@ export const Register = () => {
         password2: ""
     });
 
-    const exRegEmail = /^[^@]+@[^@]+\.[a-zA-Z]{2,}/;
-
     const { name, email, password, password2 } = formValues
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log(formValues);
+        /* console.log(formValues); */
         if ([name, email, password, password2].includes("")) {
             handleShowAlert('Todos los campos son obligatorios')
             return null
@@ -62,6 +61,7 @@ export const Register = () => {
         } catch (error) {
             console.error(error);
             handleShowAlert(error.response?.data.msg)
+            
         }
 
     };

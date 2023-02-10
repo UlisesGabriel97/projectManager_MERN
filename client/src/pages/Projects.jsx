@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Alert } from '../components/Alert';
 import { ProjectPreview } from '../components/ProjectPreview';
 import { useProjects } from '../hooks/useProjects';
 
@@ -8,15 +7,9 @@ export const Projects = () => {
   const { loading, alert, projects, getProjects } = useProjects()
 
   useEffect(() => {
-
     getProjects()
-
-
   }, [])
 
-  if (alert.msg) {
-    return <Alert {...alert} />
-  }
 
   return (
     <>

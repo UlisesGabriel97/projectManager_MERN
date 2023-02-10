@@ -1,10 +1,9 @@
 import React, { createContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { clientAxios } from '../../config/clientAxios';
+import { clientAxios } from '../config/clientAxios';
 
 const ProjectsContext = createContext()
-const navigate = useNavigate()
 
 const Toast = Swal.mixin({
     toast: true,
@@ -20,11 +19,11 @@ const Toast = Swal.mixin({
 
 const ProjectsProvider = ({ children }) => {
 
+    const navigate = useNavigate()
     const [alert, setAlert] = useState({})
     const [loading, setLoading] = useState(true)
-
-    const [projects, setProjects] = useState([]);
-    const [project, setProject] = useState([])
+    const [projects, setProjects] = useState([])
+    const [project, setProject] = useState({})
 
     const showAlert = (msg, time = true) => {
         setAlert({
@@ -53,8 +52,10 @@ const ProjectsProvider = ({ children }) => {
             }
 
             const { data } = await clientAxios.get('/projects', config)
+            console.log(data)
+            console.log(data.projects)
             setProjects(data.projects)
-            setAlert({})
+            console.log(projects)
 
         } catch (error) {
             console.error(error)
@@ -77,9 +78,10 @@ const ProjectsProvider = ({ children }) => {
                     Authorization: token
                 }
             }
-            const { data } = await clientAxios.get(`/projects/${_id}`, config)
+            const { data } = await clientAxios.get(`/projects/${id}`, config)
             setProject(data.project)
-            setAlert({})
+            //console.log(data)
+            //console.log(project)
         } catch (error) {
             console.error(error)
             showAlert(error.response ? error.response.data.msg : 'Upps.. hubo un error', false)
@@ -101,20 +103,37 @@ const ProjectsProvider = ({ children }) => {
                 }
             }
 
-            const { data } = await clientAxios.post('/projects', project, config)
-            setProjects([...projects, data.project])
+            if (project.id) {
+                const { data } = await clientAxios.put(`/projects/${id}`, project, config)
 
-            Toast.fire({
-                icon: 'success',
-                title: data.msg,
-            })
+                const projectsUpdated = projects.map(projectState => {
+                    if (projectState._id === data.project._id) {
+                        return data.project
+                    }
+                    return projectState
+                })
+                setProjects(projectsUpdated)
+
+                Toast.fire({
+                    icon: 'success',
+                    title: data.msg,
+                })
+            } else {
+                const { data } = await clientAxios.post('/projects', project, config)
+                setProjects([...projects, data.project])
+
+                Toast.fire({
+                    icon: 'success',
+                    title: data.msg,
+                })
+            }
 
             navigate('/projects')
 
         } catch (error) {
             console.error(error)
 
-            const {response} = error
+            const { response } = error
             if (response?.status === 401) {
                 navigate('/')
             } else {
@@ -123,6 +142,36 @@ const ProjectsProvider = ({ children }) => {
         }
 
 
+    }
+
+
+    const deleteProject = async (id) => {
+        try {
+            const token = sessionStorage.getItem('token')
+            if (!token) return null
+
+            const config = {
+                headers: {
+                    "Content-Type": 'applications/json',
+                    Authorization: token
+                }
+            }
+
+            const { data } = await clientAxios.delete(`/projects/${id}`, config)
+
+            const projectsFiltered = projects.filter(project => project._id !== id)
+            setProjects(projectsFiltered)
+
+            Toast.fire({
+                icon: 'success',
+                title: data.msg,
+            })
+            navigate('/projects')
+
+        } catch (error) {
+            console.error(error)
+            showAlert(error.response ? error.response.data.msg : 'Upps.. hubo un error', false)
+        }
     }
 
     return (
@@ -136,6 +185,7 @@ const ProjectsProvider = ({ children }) => {
                 project,
                 getProject,
                 storeProject,
+                deleteProject
             }}
         >
             {children}

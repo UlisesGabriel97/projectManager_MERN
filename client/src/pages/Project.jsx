@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Alert } from "../components/Alert";
 import { Collaborator } from "../components/Collaborator";
 import { Task } from "../components/Task";
 import { useProjects } from "../hooks/useProjects";
@@ -7,15 +8,15 @@ import { useProjects } from "../hooks/useProjects";
 export const Project = () => {
 
     const { id } = useParams()
-    const { loading, alert, project, getProject } = useProjects
-    const { name, description, dateExpire, client } = project
+    const { loading, alert, project, getProject } = useProjects()
+    const { name, description, dateExpire, client, _id } = project
 
     useEffect(() => {
         getProject(id)
     }, [id])
 
 
-
+    if(alert.msg) return <Alert {...alert}/>
 
     return (
         <>
@@ -26,7 +27,7 @@ export const Project = () => {
                     <div>
                         <div className="d-flex justify-content-between align-items-center">
                             <h1 className="fw-bold my-4" >{name}</h1>
-                            <Link to={`/projects/edit-project/:id`} className="me-5 d-flex align-items-center" >
+                            <Link to={`/projects/edit-project/${_id}`} className="me-5 d-flex align-items-center" >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"

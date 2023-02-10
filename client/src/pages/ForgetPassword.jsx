@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Button, Container, Form } from 'react-bootstrap'
 import { Alert } from '../components/Alert'
 import Swal from 'sweetalert2'
-import { clientAxios } from '../../config/clientAxios'
+import { clientAxios } from '../config/clientAxios'
 
 
 export const ForgetPassword = () => {

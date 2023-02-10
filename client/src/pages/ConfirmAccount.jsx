@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import { clientAxios } from '../../config/clientAxios'
+import { clientAxios } from '../config/clientAxios'
 import { Alert } from '../components/Alert'
 
 export const ConfirmAccount = () => {
@@ -28,7 +28,8 @@ export const ConfirmAccount = () => {
                     icon: 'info',
                     title: '¡Bienvenido a nuestra página!',
                     text: data.msg,
-                    confirmButtonText: 'Iniciar sesión'
+                    confirmButtonText: 'Iniciar sesión',
+                    allowOutsideClick : false
                 }).then(result => {
                     if (result.isConfirmed) {
                         navigate('/')

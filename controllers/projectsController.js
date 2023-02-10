@@ -7,7 +7,7 @@ module.exports = {
         try {
 
             const projects = await Project.find().where('createdBy').equals(req.user)
-
+            console.log(projects)
             return res.status(200).json({
                 ok: true,
                 msg: "Lista de proyectos",
@@ -79,7 +79,7 @@ module.exports = {
         try {
 
             const { id } = req.params
-            const { name, description, client, dataExpire } = req.body
+            const { name, description, client, dateExpire } = req.body
             
             if (!isValidObjectId(id)) throw createError(401, "No es un id válido")
 
@@ -91,7 +91,7 @@ module.exports = {
             project.name = name || project.name
             project.description = description || project.description
             project.client = client || project.client
-            project.dataExpire = dataExpire ||  project.dataExpire
+            project.dateExpire = dateExpire ||  project.dateExpire
 
             const projectUpdated = await project.save()
             
