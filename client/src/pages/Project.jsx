@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Spinner } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import { Alert } from "../components/Alert";
 import { Collaborator } from "../components/Collaborator";
@@ -22,7 +23,12 @@ export const Project = () => {
         <>
             {
                 loading ? (
-                    <p> Cargando...</p >
+                    <div className='d-flex flex-column py-3'>
+                        <Spinner animation="border" role="status" variant="primary" className='m-auto'>
+                            <span className="visually-hidden">Loading...</span>
+                        </Spinner>
+                        <strong className='m-auto'>Cargando...</strong>
+                    </div>
                 ) : (
                     <div>
                         <div className="d-flex justify-content-between align-items-center">

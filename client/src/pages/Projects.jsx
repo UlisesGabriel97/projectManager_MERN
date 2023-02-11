@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Spinner } from 'react-bootstrap';
 import { ProjectPreview } from '../components/ProjectPreview';
 import { useProjects } from '../hooks/useProjects';
 
@@ -18,8 +19,14 @@ export const Projects = () => {
       </h1>
       <div className='bg-white px-3 pt-3 pb-2 me-4'>
         {
-          loading ?
-            <p>Cargando...</p> : (
+          loading ? (
+            <div className='d-flex flex-column py-3'>
+              <Spinner animation="border" role="status" variant="primary" className='m-auto'>
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+              <strong className='m-auto'>Cargando...</strong>
+            </div>
+            ) : (
               projects.length ?
                 projects.map(project => {
                   return <ProjectPreview key={project._id} {...project} />

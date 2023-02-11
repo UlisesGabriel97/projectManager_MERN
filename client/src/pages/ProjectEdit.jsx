@@ -14,6 +14,7 @@ export const ProjectEdit = () => {
         Swal.fire({
             title: '¿Estás seguro de eliminar el proyecto?',
             showCancelButton: true,
+            cancelButtonText: 'Cancelar',
             confirmButtonColor: 'red',
             confirmButtonText: 'Confirmar',
         }).then((result) => {
