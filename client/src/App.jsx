@@ -70,7 +70,7 @@ function App() {
                 element={<ProjectEdit />}
               />
               <Route 
-                path='direccionDelProyecto'
+                path=':id'
                 element={<Project />}
               />
             </Route>

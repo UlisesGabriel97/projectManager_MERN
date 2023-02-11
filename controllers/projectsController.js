@@ -24,7 +24,7 @@ module.exports = {
 
     store: async (req, res) => {
         try {
-
+            console.log(req.body)
             const { name, description, client } = req.body
             if ([name, description, client].includes('') || !name || !description || !client) {
                 throw createError(400, 'Todos los campos son obligatorios')

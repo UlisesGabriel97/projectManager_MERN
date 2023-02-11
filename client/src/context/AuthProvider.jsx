@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from 'react'
 import { clientAxios } from '../config/clientAxios'
 
-
 const AuthContext = createContext()
 
 const AuthProvider = ({ children }) => {
@@ -10,7 +9,6 @@ const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-
         const authUser = async () => {
             const token = sessionStorage.getItem('token')
             if (!token) {

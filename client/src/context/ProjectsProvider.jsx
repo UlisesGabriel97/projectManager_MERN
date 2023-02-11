@@ -46,16 +46,14 @@ const ProjectsProvider = ({ children }) => {
 
             const config = {
                 headers: {
-                    "Content-Type": 'applications/json',
+                    "Content-Type": "application/json",
                     Authorization: token
                 }
             }
 
             const { data } = await clientAxios.get('/projects', config)
-            console.log(data)
-            console.log(data.projects)
+            //console.log(data.projects)
             setProjects(data.projects)
-            console.log(projects)
 
         } catch (error) {
             console.error(error)
@@ -67,21 +65,20 @@ const ProjectsProvider = ({ children }) => {
 
     const getProject = async (id) => {
         setLoading(true)
-
         try {
             const token = sessionStorage.getItem('token')
             if (!token) return null
 
             const config = {
                 headers: {
-                    "Content-Type": 'applications/json',
+                    "Content-Type": "application/json",
                     Authorization: token
                 }
             }
             const { data } = await clientAxios.get(`/projects/${id}`, config)
-            setProject(data.project)
             //console.log(data)
-            //console.log(project)
+            setProject(data.project)
+
         } catch (error) {
             console.error(error)
             showAlert(error.response ? error.response.data.msg : 'Upps.. hubo un error', false)
@@ -91,28 +88,27 @@ const ProjectsProvider = ({ children }) => {
     }
 
     const storeProject = async (project) => {
-
         try {
             const token = sessionStorage.getItem('token')
             if (!token) return null
 
             const config = {
                 headers: {
-                    "Content-Type": 'applications/json',
+                    "Content-Type": "application/json",
                     Authorization: token
                 }
             }
 
             if (project.id) {
-                const { data } = await clientAxios.put(`/projects/${id}`, project, config)
+                const { data } = await clientAxios.put(`/projects/${project.id}`, project, config)
 
                 const projectsUpdated = projects.map(projectState => {
-                    if (projectState._id === data.project._id) {
+                    if(projectState._id === data.project._id){
                         return data.project
                     }
                     return projectState
                 })
-                setProjects(projectsUpdated)
+                setProjects(projectsUpdated);
 
                 Toast.fire({
                     icon: 'success',
@@ -127,7 +123,6 @@ const ProjectsProvider = ({ children }) => {
                     title: data.msg,
                 })
             }
-
             navigate('/projects')
 
         } catch (error) {
@@ -140,8 +135,6 @@ const ProjectsProvider = ({ children }) => {
                 showAlert(response ? response.data.msg : 'Upps.. hubo un error', false)
             }
         }
-
-
     }
 
 
@@ -152,13 +145,12 @@ const ProjectsProvider = ({ children }) => {
 
             const config = {
                 headers: {
-                    "Content-Type": 'applications/json',
+                    "Content-Type": "application/json",
                     Authorization: token
                 }
             }
 
             const { data } = await clientAxios.delete(`/projects/${id}`, config)
-
             const projectsFiltered = projects.filter(project => project._id !== id)
             setProjects(projectsFiltered)
 
@@ -189,7 +181,6 @@ const ProjectsProvider = ({ children }) => {
             }}
         >
             {children}
-
         </ProjectsContext.Provider>
     )
 }

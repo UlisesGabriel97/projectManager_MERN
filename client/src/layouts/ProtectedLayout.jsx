@@ -1,5 +1,4 @@
 import React from "react";
-import Spinner from 'react-bootstrap/Spinner';
 import { Navigate, Outlet } from "react-router-dom";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";

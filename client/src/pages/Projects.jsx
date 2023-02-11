@@ -16,13 +16,13 @@ export const Projects = () => {
       <h1 className="fw-bold my-4" >
         Proyectos
       </h1>
-      <div className='bg-white p-4 me-4'>
+      <div className='bg-white px-3 pt-3 pb-2 me-4'>
         {
           loading ?
             <p>Cargando...</p> : (
               projects.length ?
                 projects.map(project => {
-                  <ProjectPreview key={project._id} {...project} />
+                  return <ProjectPreview key={project._id} {...project} />
                 }) :
                 <p>No hay proyectos para mostrar</p>
             )

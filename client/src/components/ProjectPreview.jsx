@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const ProjectPreview = ({name, _id, client}) => {
     return (
-        <div className="d-flex justify-content-between border-primary border-bottom border-opacity-50 mb-4" style={{height: '35px'}}>
+        <div className="d-flex justify-content-between border-primary border-bottom border-opacity-50 mb-3" style={{height: '35px'}}>
             <p >
                 {name}
                 <span> | {client}</span>

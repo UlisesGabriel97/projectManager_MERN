@@ -23,7 +23,6 @@ export const FormProject = () => {
     const inputDateExpire = useRef(null)
     const inputClient = useRef(null)
 
-
     useEffect(() => {
         if (id) {
             inputName.current.value = project.name
@@ -43,15 +42,16 @@ export const FormProject = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        /* if ([name, description, dateExpire, client].includes("")) {
+        if ([name, description, dateExpire, client].includes("")) {
             showAlert("Todos los campos son obligatorios");
             return null
-        } */
+        }
 
         storeProject({
+            id: id ? id : null,
             name,
             description,
-            dateExpire: '2023-02-08T00:00:00.000Z',
+            dateExpire,
             client
         })
     }
@@ -100,7 +100,7 @@ export const FormProject = () => {
                 />
             </Form.Group>
 
-            <Button variant="primary" type="submit">
+            <Button variant={id ? 'success' : 'primary'} type="submit">
                 {id ? 'Actualizar proyecto' : 'Guardar proyecto'}
             </Button>
         </Form>
